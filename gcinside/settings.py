@@ -47,11 +47,38 @@ INSTALLED_APPS = [
     'rest_auth.registration',
 
     # 'allauth.socialaccount',
-    # 'allauth.account',
+     'allauth.account',
 
     # api 문서 자동화툴
     'drf_yasg',
 ]
+
+SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': True,  # add Django Login and Django Logout buttons, CSRF token to swagger UI page
+    'LOGIN_URL': '/rest-auth/login',  # URL for the login button
+    'LOGOUT_URL': '/rest-auth/logout',  # URL for the logout button
+
+    # Swagger security definitions to include in the schema;
+    # see https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#security-definitions-object
+    'SECURITY_DEFINITIONS': {
+        'basic': {
+            'type': 'basic'
+        }
+    },
+
+    # url to an external Swagger validation service; defaults to 'http://online.swagger.io/validator/'
+    # set to None to disable the schema validation badge in the UI
+    'VALIDATOR_URL': '',
+
+    # swagger-ui configuration settings, see https://github.com/swagger-api/swagger-ui/blob/112bca906553a937ac67adc2e500bdeed96d067b/docs/usage/configuration.md#parameters
+    'OPERATIONS_SORTER': None,
+    'TAGS_SORTER': None,
+    'DOC_EXPANSION': 'list',
+    'DEEP_LINKING': False,
+    'SHOW_EXTENSIONS': True,
+    'DEFAULT_MODEL_RENDERING': 'model',
+    'DEFAULT_MODEL_DEPTH': 2,
+}
 
 # ACCOUNT_EMAIL_VERIFICATION = "mandatory" <- 이메일 인증 번호 필요
 ACCOUNT_EMAIL_VERIFICATION = "none"
