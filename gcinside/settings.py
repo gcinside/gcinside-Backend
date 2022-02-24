@@ -49,8 +49,8 @@ INSTALLED_APPS = [
     # 'allauth.socialaccount',
     # 'allauth.account',
 
-    # 회원 관리용 app
-    'user'
+    # api 문서 자동화툴
+    'drf_yasg',
 ]
 
 # ACCOUNT_EMAIL_VERIFICATION = "mandatory" <- 이메일 인증 번호 필요
