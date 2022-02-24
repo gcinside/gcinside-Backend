@@ -38,43 +38,25 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # user authentication basic module
+    'django.contrib.sites',
+    'allauth',
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_auth.registration',
+
+    # 'allauth.socialaccount',
+    # 'allauth.account',
+
+    # 회원 관리용 app
     'user'
 ]
 
-AUTH_USER_MODEL = 'user.User'
+# ACCOUNT_EMAIL_VERIFICATION = "mandatory" <- 이메일 인증 번호 필요
+ACCOUNT_EMAIL_VERIFICATION = "none"
+ACCOUNT_EMAIL_REQUIRED = True
 
-
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-        'rest_framework.permissions.IsAdminUser',
-        'rest_framework.permissions.AllowAny'
-
-    ),
-
-    'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework.renderers.JSONRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer',
-    ),
-
-
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-        # 'rest_framework.authentication.TokenAuthentication',
-        # 'rest_framework.authentication.SessionAuthentication',
-        # 'rest_framework.authentication.BasicAuthentication',
-    ),
-}
-
-JWT_AUTH = {
-    'JWT_SECRET_KEY': SECRET_KEY,
-    'JWT_ALGORITHM': 'HS256',
-    'JWT_ALLOW_REFRESH': True,
-    'JWT_EXPIRATION_DELTA': timedelta(days=7),
-    'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=28),
-}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
