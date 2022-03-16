@@ -27,6 +27,7 @@ from rest_auth.views import (
 from rest_framework.permissions import AllowAny
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
+from post.views import UploadPostView
 
 schema_url_v1_patterns = [
     url('rest-auth/login', LoginView.as_view(), name='rest_login'),
@@ -35,6 +36,8 @@ schema_url_v1_patterns = [
 
     # 회원가입
     url('rest-auth/registration', RegisterView.as_view(), name='rest_register'),
+
+    url('post/upload/', UploadPostView.as_view(), name='post_upload'),
 ]
 
 schema_view_v1 = get_schema_view(
@@ -69,5 +72,6 @@ urlpatterns = [
     url(r'^swagger/v1/$', schema_view_v1.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     url(r'^redoc/v1/$', schema_view_v1.with_ui('redoc', cache_timeout=0), name='schema-redoc-v1'),
 
+    # 게시글
     path('post/', include('post.urls')),
 ]
