@@ -7,7 +7,7 @@ import logging
 from gcinside.settings import DEFAULT_LOGGING
 
 from .serializers import PostSerializer, CommentSerializer
-from .models import Post, Comment
+from .models import Post, Comment, Like, DisLike
 
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -145,5 +145,48 @@ class DeleteCommentView(APIView):
 
                 return JsonResponse({'message' : 'Delete success'}, status=200)
             return JsonResponse({'message' : 'Different user'}, status=401)
+        else :
+            return JsonResponse({'message' : 'auth error'}, status=401)
+
+# reaction
+class LikeView(APIView):
+    @permission_classes(IsAuthenticated, )
+    def post(self, request, pk):
+        if request.user.is_authenticated:
+            post = Post.objects.get(id=pk)
+
+            if post.liked_user.filter(id=request.user.id).exists():
+                post.liked_user.remove(request.user)
+                message = 'Like Cancle'
+            else :
+                if post.disliked_user.filter(id=request.user.id).exists():
+                    post.disliked_user.remove(request.user)
+                post.liked_user.add(request.user)
+                message = 'Like'
+
+            like_count = post.liked_user.count()
+
+            return JsonResponse({'message' : message, 'like_count' : like_count}, status=200)
+        else :
+            return JsonResponse({'message' : 'auth error'}, status=401)
+
+class DisLikeView(APIView):
+    @permission_classes(IsAuthenticated, )
+    def post(self, request, pk):
+        if request.user.is_authenticated:
+            post = Post.objects.get(id=pk)
+
+            if post.disliked_user.filter(id=request.user.id).exists():
+                post.disliked_user.remove(request.user)
+                message = 'DisLike Cancle'
+            else :
+                if post.liked_user.filter(id=request.user.id).exists():
+                    post.liked_user.remove(request.user)
+                post.disliked_user.add(request.user)
+                message = 'DisLike'
+
+            dislike_count = post.disliked_user.count()
+
+            return JsonResponse({'message' : message, 'dislike_count' : dislike_count}, status=200)
         else :
             return JsonResponse({'message' : 'auth error'}, status=401)
