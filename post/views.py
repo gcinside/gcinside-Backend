@@ -7,7 +7,7 @@ import logging
 from gcinside.settings import DEFAULT_LOGGING
 
 from .serializers import PostSerializer, CommentSerializer
-from .models import Post, Comment, Like, DisLike
+from .models import Post, Comment
 
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -21,10 +21,11 @@ logging.config.dictConfig(DEFAULT_LOGGING)
 class UploadPostView(APIView):
     @swagger_auto_schema(request_body=PostSerializer)
     @permission_classes(IsAuthenticated, )
-    def post(self, request):
+    def post(self, request, gallery_pk):
         if request.user.is_authenticated:
             serializer = PostSerializer(
                 data = {
+                    'gallery' : gallery_pk,
                     'author' : request.user.id,
                     'title' : request.POST['title'],
                     'content' : request.POST['content'],
@@ -44,14 +45,15 @@ class UploadPostView(APIView):
 class UpdatePostView(APIView):
     @swagger_auto_schema(request_body=PostSerializer)
     @permission_classes(IsAuthenticated, )
-    def put(self, request, pk):
+    def put(self, request, gallery_pk, post_pk):
         if request.user.is_authenticated:
-            posting = Post.objects.get(id=pk)
+            posting = Post.objects.get(id=post_pk)
 
             if posting.author == request.user:
                 serializer = PostSerializer(
                     posting,
                     data = {
+                        'gallery' : gallery_pk,
                         'author' : request.user.id,
                         'title' : request.POST['title'],
                         'content' : request.POST['content'],
@@ -73,9 +75,9 @@ class UpdatePostView(APIView):
 class DeletePostView(APIView):
     @swagger_auto_schema(request_body=PostSerializer)
     @permission_classes(IsAuthenticated, )
-    def delete(self, request, pk):
+    def delete(self, request, gallery_pk, post_pk):
         if request.user.is_authenticated:
-            posting = Post.objects.get(id=pk)
+            posting = Post.objects.get(id=post_pk)
 
             if posting.author == request.user:
                 posting.delete()
@@ -88,11 +90,11 @@ class DeletePostView(APIView):
 # comment
 class UploadCommentView(APIView):
     @permission_classes(IsAuthenticated, )
-    def post(self, request, pk):
+    def post(self, request, gallery_pk, post_pk):
         if request.user.is_authenticated:
             serializer = CommentSerializer(
                 data = {
-                    'post' : pk,
+                    'post' : post_pk,
                     'user' : request.user.id,
                     'content' : request.POST['content'],
                     'created_at' : timezone.now(),
@@ -103,13 +105,14 @@ class UploadCommentView(APIView):
                 serializer.save()
 
                 return JsonResponse({'message' : 'Upload success'}, status=201)
+            logging.info(serializer.errors)
             return JsonResponse({'message' : 'Bad request'}, status=400)
         else :
             return JsonResponse({'message' : 'auth error'}, status=401)
 
 class UpdateCommentView(APIView):
     @permission_classes(IsAuthenticated, )
-    def put(self, request, pk, comment_pk):
+    def put(self, request, gallery_pk, post_pk, comment_pk):
         if request.user.is_authenticated:
             comment = Comment.objects.get(id=comment_pk)
 
@@ -117,7 +120,7 @@ class UpdateCommentView(APIView):
                 serializer = CommentSerializer(
                     comment,
                     data = {
-                        'post' : pk,
+                        'post' : post_pk,
                         'user' : request.user.id,
                         'content' : request.POST['content'],
                         'created_at' : timezone.now(),
@@ -136,7 +139,7 @@ class UpdateCommentView(APIView):
 
 class DeleteCommentView(APIView):
     @permission_classes(IsAuthenticated, )
-    def delete(self, request, pk, comment_pk):
+    def delete(self, request, gallery_pk, post_pk, comment_pk):
         if request.user.is_authenticated:
             comment = Comment.objects.get(id=comment_pk)
 
@@ -151,9 +154,9 @@ class DeleteCommentView(APIView):
 # reaction
 class LikeView(APIView):
     @permission_classes(IsAuthenticated, )
-    def post(self, request, pk):
+    def post(self, request, gallery_pk, post_pk):
         if request.user.is_authenticated:
-            post = Post.objects.get(id=pk)
+            post = Post.objects.get(id=post_pk)
 
             if post.liked_user.filter(id=request.user.id).exists():
                 post.liked_user.remove(request.user)
@@ -172,9 +175,9 @@ class LikeView(APIView):
 
 class DisLikeView(APIView):
     @permission_classes(IsAuthenticated, )
-    def post(self, request, pk):
+    def post(self, request, gallery_pk, post_pk):
         if request.user.is_authenticated:
-            post = Post.objects.get(id=pk)
+            post = Post.objects.get(id=post_pk)
 
             if post.disliked_user.filter(id=request.user.id).exists():
                 post.disliked_user.remove(request.user)

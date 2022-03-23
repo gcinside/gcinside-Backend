@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_filters',
     'post',
+    'gallery',
 
     # user authentication basic module
     'django.contrib.sites',

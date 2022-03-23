@@ -72,6 +72,9 @@ urlpatterns = [
     url(r'^swagger/v1/$', schema_view_v1.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     url(r'^redoc/v1/$', schema_view_v1.with_ui('redoc', cache_timeout=0), name='schema-redoc-v1'),
 
+    # 갤러리
+    path('gallery/', include('gallery.urls')),
+
     # 게시글
-    path('post/', include('post.urls')),
+    path('<int:gallery_pk>/post/', include('post.urls')),
 ]
