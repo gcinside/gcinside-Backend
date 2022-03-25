@@ -11,15 +11,16 @@ from .models import Post, Comment
 
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
+from rest_framework.generics import GenericAPIView
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 logging.config.dictConfig(DEFAULT_LOGGING)
 # Create your views here.
 # post
-class UploadPostView(APIView):
-    @swagger_auto_schema(request_body=PostSerializer)
+class UploadPostView(GenericAPIView):
+    serializer_class = PostSerializer
+
     @permission_classes(IsAuthenticated, )
     def post(self, request, gallery_pk):
         if request.user.is_authenticated:
@@ -38,12 +39,14 @@ class UploadPostView(APIView):
                 serializer.save()
 
                 return JsonResponse({'message' : 'Upload success'}, status=201)
+            logging.info(serializer.data)
             return JsonResponse({'message' : 'Bad request'}, status=400)
         else :
             return JsonResponse({'message' : 'auth error'}, status=401)
 
-class UpdatePostView(APIView):
-    @swagger_auto_schema(request_body=PostSerializer)
+class UpdatePostView(GenericAPIView):
+    serializer_class = PostSerializer
+
     @permission_classes(IsAuthenticated, )
     def put(self, request, gallery_pk, post_pk):
         if request.user.is_authenticated:
@@ -72,8 +75,9 @@ class UpdatePostView(APIView):
         else :
             return JsonResponse({'message' : 'auth error'}, status=401)
 
-class DeletePostView(APIView):
-    @swagger_auto_schema(request_body=PostSerializer)
+class DeletePostView(GenericAPIView):
+    serializer_class = PostSerializer
+
     @permission_classes(IsAuthenticated, )
     def delete(self, request, gallery_pk, post_pk):
         if request.user.is_authenticated:
@@ -88,7 +92,9 @@ class DeletePostView(APIView):
             return JsonResponse({'message' : 'auth error'}, status=401)
 
 # comment
-class UploadCommentView(APIView):
+class UploadCommentView(GenericAPIView):
+    serializer_class = CommentSerializer
+
     @permission_classes(IsAuthenticated, )
     def post(self, request, gallery_pk, post_pk):
         if request.user.is_authenticated:
@@ -110,7 +116,9 @@ class UploadCommentView(APIView):
         else :
             return JsonResponse({'message' : 'auth error'}, status=401)
 
-class UpdateCommentView(APIView):
+class UpdateCommentView(GenericAPIView):
+    serializer_class = CommentSerializer
+
     @permission_classes(IsAuthenticated, )
     def put(self, request, gallery_pk, post_pk, comment_pk):
         if request.user.is_authenticated:
@@ -137,7 +145,9 @@ class UpdateCommentView(APIView):
         else :
             return JsonResponse({'message' : 'auth error'}, status=401)
 
-class DeleteCommentView(APIView):
+class DeleteCommentView(GenericAPIView):
+    serializer_class = CommentSerializer
+
     @permission_classes(IsAuthenticated, )
     def delete(self, request, gallery_pk, post_pk, comment_pk):
         if request.user.is_authenticated:
@@ -152,7 +162,7 @@ class DeleteCommentView(APIView):
             return JsonResponse({'message' : 'auth error'}, status=401)
 
 # reaction
-class LikeView(APIView):
+class LikeView(GenericAPIView):
     @permission_classes(IsAuthenticated, )
     def post(self, request, gallery_pk, post_pk):
         if request.user.is_authenticated:
@@ -173,7 +183,7 @@ class LikeView(APIView):
         else :
             return JsonResponse({'message' : 'auth error'}, status=401)
 
-class DisLikeView(APIView):
+class DisLikeView(GenericAPIView):
     @permission_classes(IsAuthenticated, )
     def post(self, request, gallery_pk, post_pk):
         if request.user.is_authenticated:

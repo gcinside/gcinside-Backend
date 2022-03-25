@@ -10,11 +10,13 @@ from .serializers import GallerySerializer
 
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
+from rest_framework.generics import GenericAPIView
 
 logging.config.dictConfig(DEFAULT_LOGGING)
 # Create your views here.
-class UploadGalleryView(APIView):
+class UploadGalleryView(GenericAPIView):
+    serializer_class = GallerySerializer
+
     @permission_classes(IsAuthenticated, )
     def post(self, request):
         if request.user.is_authenticated:

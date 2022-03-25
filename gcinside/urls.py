@@ -37,7 +37,8 @@ schema_url_v1_patterns = [
     # 회원가입
     url('rest-auth/registration', RegisterView.as_view(), name='rest_register'),
 
-    url('post/upload/', UploadPostView.as_view(), name='post_upload'),
+    url('<int:gallery_pk>/post/', include('post.urls')),
+    url('gallery/', include('gallery.urls')),
 ]
 
 schema_view_v1 = get_schema_view(
