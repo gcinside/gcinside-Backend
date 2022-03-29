@@ -6,12 +6,13 @@ import logging.config
 import logging
 from gcinside.settings import DEFAULT_LOGGING
 
-from .serializers import PostSerializer, CommentSerializer
+from .serializers import PostSerializer, CommentSerializer, LikeSerialzier, DisLikeSerializer
 from .models import Post, Comment
 
 from rest_framework.decorators import permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.generics import GenericAPIView
+from rest_framework.views import APIView
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
@@ -163,6 +164,8 @@ class DeleteCommentView(GenericAPIView):
 
 # reaction
 class LikeView(GenericAPIView):
+    serializer_class = LikeSerialzier
+
     @permission_classes(IsAuthenticated, )
     def post(self, request, gallery_pk, post_pk):
         if request.user.is_authenticated:
@@ -184,6 +187,8 @@ class LikeView(GenericAPIView):
             return JsonResponse({'message' : 'auth error'}, status=401)
 
 class DisLikeView(GenericAPIView):
+    serializer_class = DisLikeSerializer
+
     @permission_classes(IsAuthenticated, )
     def post(self, request, gallery_pk, post_pk):
         if request.user.is_authenticated:

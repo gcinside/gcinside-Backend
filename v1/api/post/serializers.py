@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Post, Comment
+from .models import Post, Comment, Like, DisLike
 
 class PostSerializer(serializers.ModelSerializer):
     image = serializers.ImageField(required=False, allow_null=True)
@@ -23,4 +23,20 @@ class CommentSerializer(serializers.ModelSerializer):
             'user',
             'content',
             'created_at',
+        )
+
+class LikeSerialzier(serializers.ModelSerializer):
+    class Meta:
+        model = Like
+        fields = (
+            'user',
+            'post',
+        )
+
+class DisLikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DisLike
+        fields = (
+            'user',
+            'post',
         )
