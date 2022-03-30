@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import (UploadPostView, UpdatePostView, DeletePostView, UploadCommentView, UpdateCommentView, DeleteCommentView, 
-LikeView, DisLikeView)
+LikeView, DisLikeView, PostListView)
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -9,6 +9,7 @@ urlpatterns = [
     path('upload/', UploadPostView.as_view(), name='post_upload'),
     path('update/<int:post_pk>/', UpdatePostView.as_view(), name='post_update'),
     path('delete/<int:post_pk>/', DeletePostView.as_view(), name='post_delete'),
+    path('list/', PostListView.as_view(), name='post_list'),
 
     # comment
     path('<int:post_pk>/comment/upload/', UploadCommentView.as_view(), name='comment_upload'),
