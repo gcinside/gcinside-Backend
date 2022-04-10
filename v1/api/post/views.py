@@ -6,12 +6,13 @@ import logging.config
 import logging
 from gcinside.settings import DEFAULT_LOGGING
 
-from .serializers import PostSerializer, CommentSerializer
+from .serializers import PostSerializer, CommentSerializer, LikeSerialzier, DisLikeSerializer
 from .models import Post, Comment
+from .pagination import PostPagination
 
 from rest_framework.decorators import permission_classes
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.generics import GenericAPIView
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.generics import GenericAPIView, ListCreateAPIView
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
@@ -91,6 +92,11 @@ class DeletePostView(GenericAPIView):
         else :
             return JsonResponse({'message' : 'auth error'}, status=401)
 
+class PostListView(ListCreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    pagination_class = PostPagination
+
 # comment
 class UploadCommentView(GenericAPIView):
     serializer_class = CommentSerializer
@@ -111,7 +117,6 @@ class UploadCommentView(GenericAPIView):
                 serializer.save()
 
                 return JsonResponse({'message' : 'Upload success'}, status=201)
-            logging.info(serializer.errors)
             return JsonResponse({'message' : 'Bad request'}, status=400)
         else :
             return JsonResponse({'message' : 'auth error'}, status=401)
@@ -163,6 +168,8 @@ class DeleteCommentView(GenericAPIView):
 
 # reaction
 class LikeView(GenericAPIView):
+    serializer_class = LikeSerialzier
+
     @permission_classes(IsAuthenticated, )
     def post(self, request, gallery_pk, post_pk):
         if request.user.is_authenticated:
@@ -184,6 +191,8 @@ class LikeView(GenericAPIView):
             return JsonResponse({'message' : 'auth error'}, status=401)
 
 class DisLikeView(GenericAPIView):
+    serializer_class = DisLikeSerializer
+
     @permission_classes(IsAuthenticated, )
     def post(self, request, gallery_pk, post_pk):
         if request.user.is_authenticated:
