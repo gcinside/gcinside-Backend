@@ -19,7 +19,7 @@ class UploadGalleryView(GenericAPIView):
 
     @permission_classes(IsAuthenticated, )
     def post(self, request):
-        if request.user.is_authenticated:
+        if request.user.is_superuser:
             serializer = GallerySerializer(
                 data = {
                     'gallery_name' : request.POST['gallery_name'],
@@ -32,4 +32,4 @@ class UploadGalleryView(GenericAPIView):
                 return JsonResponse({'message' : 'Upload success'}, status=201)
             return JsonResponse({'message' : 'Bad request'}, stauts=400)
         else :
-            return JsonResponse({'message' : 'auth error'}, status=401)
+            return JsonResponse({'message' : 'not admin'}, status=401)
