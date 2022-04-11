@@ -16,26 +16,11 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
-import rest_auth.registration.views
-from django.contrib import admin
-from django.urls import path, include
-from rest_auth.registration.views import RegisterView
-from rest_auth.views import (
-    LoginView, LogoutView, PasswordChangeView,
-    PasswordResetView, PasswordResetConfirmView
-)
 from rest_framework.permissions import AllowAny
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 
 schema_url_v1_patterns = [
-    url('rest-auth/login', LoginView.as_view(), name='rest_login'),
-    url('rest-auth/logout', LogoutView.as_view(), name='rest_logout'),
-    url('rest-auth/password/change', PasswordChangeView.as_view(), name='rest_password_change'),
-
-    # 회원가입
-    url('rest-auth/registration', RegisterView.as_view(), name='rest_register'),
-
     url('<int:gallery_pk>/post/', include('v1.api.post.urls')),
     url('gallery/', include('v1.api.gallery.urls')),
 ]
@@ -59,13 +44,9 @@ schema_view_v1 = get_schema_view(
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    # 로그인
-    path('rest-auth/login', LoginView.as_view(), name='rest_login'),
-    path('rest-auth/logout', LogoutView.as_view(), name='rest_logout'),
-    path('rest-auth/password/change', PasswordChangeView.as_view(), name='rest_password_change'),
-
-    # 회원가입
-    path('rest-auth/registration', RegisterView.as_view(), name='rest_register'),
+    path('accounts/',include('dj_rest_auth.urls')),
+    path('accounts/',include('allauth.urls')),
+    path('accounts/',include('v1.api.accounts.urls')),
 
     # Auto DRF API docs
     url(r'^swagger(?P<format>\.json|\.yaml)/v1$', schema_view_v1.without_ui(cache_timeout=0), name='schema-json'),
