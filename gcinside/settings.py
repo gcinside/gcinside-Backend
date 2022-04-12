@@ -60,7 +60,7 @@ INSTALLED_APPS = [
 ]
 
 SITE_ID = 1
-#AUTH_USER_MODEL = 'accounts.User'
+AUTH_USER_MODEL = 'v1.api.accounts.User'
 
 
 REST_USE_JWT = True
