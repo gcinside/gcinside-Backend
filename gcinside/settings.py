@@ -18,7 +18,9 @@ import json
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 ROOT_DIR = os.path.dirname(BASE_DIR)
+SECRET_PATH = os.path.join(ROOT_DIR, '.footprint_secret')
 SECRET_BASE_FILE = os.path.join(BASE_DIR, 'secret.json')
+
 secrets = json.loads(open(SECRET_BASE_FILE).read())
 for key, value in secrets.items():
     setattr(sys.modules[__name__], key, value)
@@ -40,12 +42,13 @@ INSTALLED_APPS = [
     'django_filters',
     'v1.api.post',
     'v1.api.gallery',
-
     # my app
     'accounts',
+
     # django-rest-framework
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
+    'rest_framework.authtoken',
     # dj-rest-auth
     'dj_rest_auth',
     'dj_rest_auth.registration',
@@ -60,7 +63,7 @@ INSTALLED_APPS = [
 ]
 
 SITE_ID = 1
-AUTH_USER_MODEL = 'v1.api.accounts.User'
+AUTH_USER_MODEL = 'accounts.User'
 
 
 REST_USE_JWT = True
