@@ -46,7 +46,7 @@ urlpatterns = [
 
     path('accounts/',include('dj_rest_auth.urls')),
     path('accounts/',include('allauth.urls')),
-    path('accounts/',include('v1.api.accounts.urls')),
+    path('accounts/', include('accounts.urls')),
 
     # Auto DRF API docs
     url(r'^swagger(?P<format>\.json|\.yaml)/v1$', schema_view_v1.without_ui(cache_timeout=0), name='schema-json'),
