@@ -141,3 +141,7 @@ def github_callback(request):
         accept_json = accept.json()
         accept_json.pop('user', None)
         return JsonResponse(accept_json)
+class GithubLogin(SocialLoginView):
+    adapter_class = github_view.GitHubOAuth2Adapter
+    callback_url = GITHUB_CALLBACK_URI
+    client_class = OAuth2Client
