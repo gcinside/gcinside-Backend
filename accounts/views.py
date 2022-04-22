@@ -3,8 +3,11 @@ from accounts.models import User
 from django.shortcuts import redirect
 from allauth.socialaccount.models import SocialAccount
 from dj_rest_auth.registration.views import SocialLoginView
+from allauth.socialaccount.providers import github
 from allauth.socialaccount.providers.google import views as google_view
+from allauth.socialaccount.providers.github import views as github_view
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
+import requests
 from django.http import JsonResponse
 import requests
 from rest_framework import status
@@ -13,6 +16,7 @@ from json.decoder import JSONDecodeError
 state = getattr(settings, 'STATE')
 BASE_URL = 'http://localhost:8000/'
 GOOGLE_CALLBACK_URI = BASE_URL + 'accounts/google/callback/'
+GITHUB_CALLBACK_URI = BASE_URL + 'accounts/github/callback/'
 
 def google_login(request):
     scope = "https://www.googleapis.com/auth/userinfo.email"
@@ -72,3 +76,9 @@ class GoogleLogin(SocialLoginView):
     adapter_class = google_view.GoogleOAuth2Adapter
     callback_url = GOOGLE_CALLBACK_URI
     client_class = OAuth2Client
+
+def github_login(request):
+    client_id = getattr(settings, 'SOCIAL_AUTH_GITHUB_KEY')
+    return redirect(
+        f"https://github.com/login/oauth/authorize?client_id={client_id}&redirect_uri={GITHUB_CALLBACK_URI}"
+    )
