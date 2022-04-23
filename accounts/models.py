@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import AbstractUser, BaseUserManager
+from .utils import random_name_generator
 
 
 class UserManager(BaseUserManager):
@@ -25,10 +26,10 @@ class UserManager(BaseUserManager):
             raise ValueError(_('Superuser must have is_superuser=True.'))
         return self.create_user(email, password, **extra_fields)
 
-
 class User(AbstractUser):
-    username = None
+    username = models.CharField(max_length=100)
     email = models.EmailField(unique=True, max_length=255)
+    profile_image = models.ImageField(blank=True, null=True, upload_to='user_profile')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -37,3 +38,10 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.email
+
+    def save(self):
+        if not self.username:
+            self.username = random_name_generator()
+            while User.objects.filter(username=self.username):
+                self.username = random_name_generator()
+        super(User, self).save()
