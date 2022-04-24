@@ -39,7 +39,7 @@ class User(AbstractUser):
     def __str__(self):
         return self.email
 
-    def save(self):
+    def save(self, *args, **kwargs):
         if not self.username:
             self.username = random_name_generator()
             while User.objects.filter(username=self.username):
