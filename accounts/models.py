@@ -29,7 +29,7 @@ class UserManager(BaseUserManager):
 class User(AbstractUser):
     username = models.CharField(max_length=100)
     email = models.EmailField(unique=True, max_length=255)
-    profile_image = models.ImageField(blank=True, null=True, upload_to='user_profile')
+    profile_image = models.ImageField(blank=True, null=True, upload_to='user_profile', default='user_profile/default.jpg')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
