@@ -113,6 +113,11 @@ SWAGGER_SETTINGS = {
     'DEFAULT_MODEL_DEPTH': 2,
 }
 
+MIDDLEWARE_CLASSES = (
+    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    'oauth2_provider.middleware.OAuth2TokenMiddleware',
+)
+
 # ACCOUNT_EMAIL_VERIFICATION = "mandatory" <- 이메일 인증 번호 필요
 ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_EMAIL_REQUIRED = True

@@ -45,3 +45,12 @@ class User(AbstractUser):
             while User.objects.filter(username=self.username):
                 self.username = random_name_generator()
         super(User, self).save()
+
+class ReportUser(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE, related_name='report')
+    reporter = models.ForeignKey(User, on_delete=models.CASCADE)
+    reason = models.TextField()
+    reported_at = models.DateTimeField()
+
+    def __str__(self) -> str:
+        return 'report ' + self.user.username

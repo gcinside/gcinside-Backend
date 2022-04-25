@@ -1,6 +1,8 @@
+from sqlite3 import Date
 from django.conf import settings
 from accounts.models import User
 from django.shortcuts import redirect
+from django.utils import timezone
 from allauth.socialaccount.models import SocialAccount
 from dj_rest_auth.registration.views import SocialLoginView
 from allauth.socialaccount.providers import github
@@ -15,7 +17,7 @@ from json.decoder import JSONDecodeError
 from rest_framework.generics import GenericAPIView
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
-from .serializers import UserSerializer
+from .serializers import ReportUserSerializer, UserSerializer
 import logging.config
 import logging
 from gcinside.settings import DEFAULT_LOGGING
@@ -193,4 +195,29 @@ class UpdateProfileImage(GenericAPIView):
             serializer.save()
 
             return JsonResponse({'message' : 'Image Update'}, status=201)
+        return JsonResponse({'message' : 'Bad request'}, status=400)
+
+class Report(GenericAPIView):
+    serializer_class = ReportUserSerializer
+
+    @permission_classes(IsAuthenticated, )
+    def post(self, request, username):
+        user = User.objects.get(username=username)
+
+        serializer = ReportUserSerializer(
+            data = {
+                'user' : user.id,
+                'reporter' : request.user.id,
+                'reason' : request.POST['report_reason'],
+                'reported_at' : timezone.now(),
+            }
+        )
+
+        if serializer.is_valid():
+            serializer.save()
+
+            user.is_active = False
+            user.save()
+
+            return JsonResponse({'message' : 'report success'}, status=200)
         return JsonResponse({'message' : 'Bad request'}, status=400)

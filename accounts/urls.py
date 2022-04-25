@@ -19,4 +19,6 @@ urlpatterns = [
 
     path('user/profile/username/<username>/', views.UpdateUsername.as_view(), name='update_username'),
     path('user/profile/image/<username>/', views.UpdateProfileImage.as_view(), name='update_profileImage'),
+
+    path('user/report/<username>/', views.Report.as_view(), name='user_report'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

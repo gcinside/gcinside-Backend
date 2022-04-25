@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import User
+from .models import ReportUser, User
 
 class CustomTokenRefreshSerializer(serializers.Serializer):
     refresh_token = serializers.CharField()
@@ -20,4 +20,14 @@ class UserSerializer(serializers.ModelSerializer):
         fields = (
             'username',
             'profile_image',
+        )
+
+class ReportUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ReportUser
+        fields = (
+            'user',
+            'reporter',
+            'reason',
+            'reported_at',
         )
