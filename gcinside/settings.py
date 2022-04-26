@@ -20,6 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 ROOT_DIR = os.path.dirname(BASE_DIR)
 SECRET_PATH = os.path.join(ROOT_DIR, '.footprint_secret')
 SECRET_BASE_FILE = os.path.join(BASE_DIR, 'secret.json')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 secrets = json.loads(open(SECRET_BASE_FILE).read())
 for key, value in secrets.items():
