@@ -16,6 +16,10 @@ urlpatterns = [
     path('<int:post_pk>/comment/update/<int:comment_pk>/', UpdateCommentView.as_view(), name='comment_update'),
     path('<int:post_pk>/comment/delete/<int:comment_pk>/', DeleteCommentView.as_view(), name='comment_delete'),
 
+    # cocomment
+    path('<int:post_pk>/comment/upload/<int:parent_comment>/', UploadCommentView.as_view(), name='comment_upload'),
+    path('<int:post_pk>/comment/update/<int:comment_pk>/<int:parent_comment>/', UpdateCommentView.as_view(), name='comment_update'),
+
     # reaction
     path('<int:post_pk>/like/', LikeView.as_view(), name='post_like'),
     path('<int:post_pk>/dislike/', DisLikeView.as_view(), name='post_dislike'),

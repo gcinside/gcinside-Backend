@@ -11,10 +11,8 @@ from .models import Post, Comment
 from .pagination import PostPagination
 
 from rest_framework.decorators import permission_classes
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import GenericAPIView, ListCreateAPIView
-from drf_yasg.utils import swagger_auto_schema
-from drf_yasg import openapi
 
 logging.config.dictConfig(DEFAULT_LOGGING)
 # Create your views here.
@@ -102,12 +100,13 @@ class UploadCommentView(GenericAPIView):
     serializer_class = CommentSerializer
 
     @permission_classes(IsAuthenticated, )
-    def post(self, request, gallery_pk, post_pk):
+    def post(self, request, gallery_pk, post_pk, parent_comment=None):
         if request.user.is_authenticated:
             serializer = CommentSerializer(
                 data = {
                     'post' : post_pk,
                     'user' : request.user.id,
+                    'parent_comment' : parent_comment,
                     'content' : request.POST['content'],
                     'created_at' : timezone.now(),
                 }
@@ -125,7 +124,7 @@ class UpdateCommentView(GenericAPIView):
     serializer_class = CommentSerializer
 
     @permission_classes(IsAuthenticated, )
-    def put(self, request, gallery_pk, post_pk, comment_pk):
+    def put(self, request, gallery_pk, post_pk, comment_pk, parent_comment=None):
         if request.user.is_authenticated:
             comment = Comment.objects.get(id=comment_pk)
 
@@ -135,6 +134,7 @@ class UpdateCommentView(GenericAPIView):
                     data = {
                         'post' : post_pk,
                         'user' : request.user.id,
+                        'parent_comment' : parent_comment,
                         'content' : request.POST['content'],
                         'created_at' : timezone.now(),
                     }

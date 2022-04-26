@@ -23,6 +23,7 @@ from drf_yasg.views import get_schema_view
 schema_url_v1_patterns = [
     url('<int:gallery_pk>/post/', include('v1.api.post.urls')),
     url('gallery/', include('v1.api.gallery.urls')),
+    url('accounts/', include('accounts.urls')),
 ]
 
 schema_view_v1 = get_schema_view(

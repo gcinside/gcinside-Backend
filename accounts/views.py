@@ -1,6 +1,8 @@
+from sqlite3 import Date
 from django.conf import settings
 from accounts.models import User
 from django.shortcuts import redirect
+from django.utils import timezone
 from allauth.socialaccount.models import SocialAccount
 from dj_rest_auth.registration.views import SocialLoginView
 from allauth.socialaccount.providers import github
@@ -12,7 +14,15 @@ from django.http import JsonResponse
 import requests
 from rest_framework import status
 from json.decoder import JSONDecodeError
+from rest_framework.generics import GenericAPIView
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAuthenticated
+from .serializers import ReportUserSerializer, UserSerializer
+import logging.config
+import logging
+from gcinside.settings import DEFAULT_LOGGING
 
+logging.config.dictConfig(DEFAULT_LOGGING)
 state = getattr(settings, 'STATE')
 BASE_URL = 'http://localhost:8000/'
 GOOGLE_CALLBACK_URI = BASE_URL + 'accounts/google/callback/'
@@ -82,6 +92,7 @@ def github_login(request):
     return redirect(
         f"https://github.com/login/oauth/authorize?client_id={client_id}&redirect_uri={GITHUB_CALLBACK_URI}"
     )
+
 def github_callback(request):
     client_id = getattr(settings, 'SOCIAL_AUTH_GITHUB_CLIENT_ID')
     client_secret = getattr(settings, 'SOCIAL_AUTH_GITHUB_SECRET')
@@ -141,7 +152,72 @@ def github_callback(request):
         accept_json = accept.json()
         accept_json.pop('user', None)
         return JsonResponse(accept_json)
+
 class GithubLogin(SocialLoginView):
     adapter_class = github_view.GitHubOAuth2Adapter
     callback_url = GITHUB_CALLBACK_URI
     client_class = OAuth2Client
+
+class UpdateUsername(GenericAPIView):
+    serializer_class = UserSerializer
+
+    @permission_classes(IsAuthenticated, )
+    def put(self, request, username):
+        user = User.objects.get(username=username)
+
+        serializer = UserSerializer(
+            user,
+            data = {
+                'username' : request.POST['username'],
+            }
+        )
+
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse({'message' : 'Username Update'}, status=201)
+        return JsonResponse({'message' : 'Bad request'}, status=400)
+
+class UpdateProfileImage(GenericAPIView):
+    serializer_class = UserSerializer
+
+    @permission_classes(IsAuthenticated, )
+    def put(self, request, username):
+        user = User.objects.get(username=username)
+
+        serializer = UserSerializer(
+            user,
+            data = {
+                'profile_image' : request.FILES['image'],
+            }
+        )
+
+        if serializer.is_valid():
+            serializer.save()
+
+            return JsonResponse({'message' : 'Image Update'}, status=201)
+        return JsonResponse({'message' : 'Bad request'}, status=400)
+
+class Report(GenericAPIView):
+    serializer_class = ReportUserSerializer
+
+    @permission_classes(IsAuthenticated, )
+    def post(self, request, username):
+        user = User.objects.get(username=username)
+
+        serializer = ReportUserSerializer(
+            data = {
+                'user' : user.id,
+                'reporter' : request.user.id,
+                'reason' : request.POST['report_reason'],
+                'reported_at' : timezone.now(),
+            }
+        )
+
+        if serializer.is_valid():
+            serializer.save()
+
+            user.is_active = False
+            user.save()
+
+            return JsonResponse({'message' : 'report success'}, status=200)
+        return JsonResponse({'message' : 'Bad request'}, status=400)
