@@ -39,6 +39,7 @@ schema_view_v1 = get_schema_view(
     public=True,
     permission_classes=(AllowAny,),
     patterns=schema_url_v1_patterns,
+
 )
 
 

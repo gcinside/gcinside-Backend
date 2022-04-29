@@ -15,12 +15,12 @@ import requests
 from rest_framework import status
 from json.decoder import JSONDecodeError
 from rest_framework.generics import GenericAPIView
-from rest_framework.decorators import permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from .serializers import ReportUserSerializer, UserSerializer
 import logging.config
 import logging
 from gcinside.settings import DEFAULT_LOGGING
+from rest_framework.decorators import api_view, permission_classes
 
 logging.config.dictConfig(DEFAULT_LOGGING)
 state = getattr(settings, 'STATE')
@@ -28,12 +28,15 @@ BASE_URL = 'http://localhost:8000/'
 GOOGLE_CALLBACK_URI = BASE_URL + 'accounts/google/callback/'
 GITHUB_CALLBACK_URI = BASE_URL + 'accounts/github/callback/'
 
+@api_view(['POST'])
 def google_login(request):
     scope = "https://www.googleapis.com/auth/userinfo.email"
     client_id = getattr(settings, "SOCIAL_AUTH_GOOGLE_CLIENT_ID")
 
     return redirect(f"https://accounts.google.com/o/oauth2/v2/auth?client_id={client_id}&response_type=code&redirect_uri={GOOGLE_CALLBACK_URI}&scope={scope}")
 
+@api_view(['POST'])
+@permission_classes([AllowAny, ])
 def google_callback(request):
     client_id = getattr(settings, "SOCIAL_AUTH_GOOGLE_CLIENT_ID")
     client_secret = getattr(settings, "SOCIAL_AUTH_GOOGLE_SECRET")
@@ -87,12 +90,15 @@ class GoogleLogin(SocialLoginView):
     callback_url = GOOGLE_CALLBACK_URI
     client_class = OAuth2Client
 
+@api_view(['POST'])
 def github_login(request):
     client_id = getattr(settings, 'SOCIAL_AUTH_GITHUB_KEY')
     return redirect(
         f"https://github.com/login/oauth/authorize?client_id={client_id}&redirect_uri={GITHUB_CALLBACK_URI}"
     )
 
+@api_view(['POST'])
+@permission_classes([AllowAny, ])
 def github_callback(request):
     client_id = getattr(settings, 'SOCIAL_AUTH_GITHUB_CLIENT_ID')
     client_secret = getattr(settings, 'SOCIAL_AUTH_GITHUB_SECRET')
