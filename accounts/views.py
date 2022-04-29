@@ -35,7 +35,7 @@ def google_login(request):
 
     return redirect(f"https://accounts.google.com/o/oauth2/v2/auth?client_id={client_id}&response_type=code&redirect_uri={GOOGLE_CALLBACK_URI}&scope={scope}")
 
-@api_view(['POST'])
+@api_view(['GET'])
 @permission_classes([AllowAny, ])
 def google_callback(request):
     client_id = getattr(settings, "SOCIAL_AUTH_GOOGLE_CLIENT_ID")
@@ -97,7 +97,7 @@ def github_login(request):
         f"https://github.com/login/oauth/authorize?client_id={client_id}&redirect_uri={GITHUB_CALLBACK_URI}"
     )
 
-@api_view(['POST'])
+@api_view(['GET'])
 @permission_classes([AllowAny, ])
 def github_callback(request):
     client_id = getattr(settings, 'SOCIAL_AUTH_GITHUB_CLIENT_ID')
