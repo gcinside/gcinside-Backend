@@ -2,6 +2,7 @@
 
 ## Test Server Deploy Setting 
 > ***현재 배포는 우분투를 사용하기 때문에 우분투 기준으로 작성 하겠습니다.***
+### python & python environment install
 - clone git repository
 ```shell
 cd /srv
@@ -36,4 +37,5 @@ python3 manage.py runserver 0.0.0.0:8000
 
 - goto chrome & insert << your aws ec2 instance url >>:8000
 ![스크린샷 2022-04-30 오전 1 40 15](https://user-images.githubusercontent.com/69895368/165987538-3e5b318d-a0c4-405b-8e6a-13441f4cf20f.jpg)
+
 
