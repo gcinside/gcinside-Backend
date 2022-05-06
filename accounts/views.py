@@ -1,15 +1,12 @@
-from sqlite3 import Date
 from django.conf import settings
 from accounts.models import User
 from django.shortcuts import redirect
 from django.utils import timezone
 from allauth.socialaccount.models import SocialAccount
 from dj_rest_auth.registration.views import SocialLoginView
-from allauth.socialaccount.providers import github
 from allauth.socialaccount.providers.google import views as google_view
 from allauth.socialaccount.providers.github import views as github_view
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
-import requests
 from django.http import JsonResponse
 import requests
 from rest_framework import status

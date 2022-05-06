@@ -1,6 +1,4 @@
-from django.shortcuts import render
 from django.http.response import JsonResponse
-from django.utils import timezone
 
 import logging.config
 import logging
