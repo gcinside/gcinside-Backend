@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
-import datetime
 import os
 import sys
 import json
@@ -19,16 +18,19 @@ import json
 BASE_DIR = Path(__file__).resolve().parent.parent
 ROOT_DIR = os.path.dirname(BASE_DIR)
 SECRET_PATH = os.path.join(ROOT_DIR, '.footprint_secret')
-SECRET_BASE_FILE = os.path.join(BASE_DIR, 'secret.json')
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+SECRET_BASE_FILE = os.path.join(ROOT_DIR, 'secret.json')
+
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    BASE_DIR / 'static'
+]
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 secrets = json.loads(open(SECRET_BASE_FILE).read())
 for key, value in secrets.items():
     setattr(sys.modules[__name__], key, value)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
 # Application definition
 
 INSTALLED_APPS = [
