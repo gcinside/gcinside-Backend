@@ -16,7 +16,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from .serializers import ReportUserSerializer, UserSerializer
 import logging.config
 import logging
-from gcinside.settings import DEFAULT_LOGGING
+from gcinside.settings.base import DEFAULT_LOGGING
 from rest_framework.decorators import api_view, permission_classes
 
 logging.config.dictConfig(DEFAULT_LOGGING)

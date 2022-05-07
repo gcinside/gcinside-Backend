@@ -3,7 +3,7 @@ from django.utils import timezone
 
 import logging.config
 import logging
-from gcinside.settings import DEFAULT_LOGGING
+from gcinside.settings.base import DEFAULT_LOGGING
 
 from .serializers import PostSerializer, CommentSerializer, LikeSerialzier, DisLikeSerializer
 from .models import Post, Comment
