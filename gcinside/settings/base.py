@@ -22,9 +22,9 @@ SECRET_BASE_FILE = os.path.join(ROOT_DIR, 'secret.json')
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    BASE_DIR / 'static'
+    os.path.join(ROOT_DIR,'static')
 ]
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = BASE_DIR / 'static'
 
 secrets = json.loads(open(SECRET_BASE_FILE).read())
 for key, value in secrets.items():
