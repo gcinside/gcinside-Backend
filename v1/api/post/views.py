@@ -12,6 +12,8 @@ from .pagination import PostPagination
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import GenericAPIView, ListCreateAPIView
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 logging.config.dictConfig(DEFAULT_LOGGING)
 # Create your views here.
@@ -20,6 +22,21 @@ class UploadPostView(GenericAPIView):
     serializer_class = PostSerializer
 
     @permission_classes(IsAuthenticated, )
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'title' : openapi.Schema(type=openapi.TYPE_STRING, description='제목'),
+                'content' : openapi.Schema(type=openapi.TYPE_STRING, description='내용'),
+                'image' : openapi.Schema(type=openapi.TYPE_FILE, description='이미지'),
+            }
+        ),
+        responses={
+            200 : openapi.Response('Success'),
+            400 : 'Bad Requset',
+            401 : 'Authentication Failed',
+        }
+    )
     def post(self, request, gallery_pk):
         if request.user.is_authenticated:
             serializer = PostSerializer(
@@ -36,7 +53,7 @@ class UploadPostView(GenericAPIView):
             if (serializer.is_valid()):
                 serializer.save()
 
-                return JsonResponse({'message' : 'Upload success'}, status=201)
+                return JsonResponse({'message' : 'Upload success'}, status=200)
             logging.info(serializer.data)
             return JsonResponse({'message' : 'Bad request'}, status=400)
         else :
@@ -45,7 +62,23 @@ class UploadPostView(GenericAPIView):
 class UpdatePostView(GenericAPIView):
     serializer_class = PostSerializer
 
+    
     @permission_classes(IsAuthenticated, )
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'title' : openapi.Schema(type=openapi.TYPE_STRING, description=' 게시글 제목'),
+                'content' : openapi.Schema(type=openapi.TYPE_STRING, description='게시글 내용'),
+                'image' : openapi.Schema(type=openapi.TYPE_FILE, description='이미지'),
+            }
+        ),
+        responses={
+            200 : openapi.Response('Success'),
+            400 : 'Bad Requset',
+            401 : 'Authentication Failed',
+        }
+    )
     def put(self, request, gallery_pk, post_pk):
         if request.user.is_authenticated:
             posting = Post.objects.get(id=post_pk)
@@ -66,7 +99,7 @@ class UpdatePostView(GenericAPIView):
                 if serializer.is_valid():
                     serializer.save()
     
-                    return JsonResponse({'message' : 'Update success'}, status=201)
+                    return JsonResponse({'message' : 'Update success'}, status=200)
                 return JsonResponse({'message' : 'Bad request'}, status=400)
             else :
                 return JsonResponse({'message' : 'different user'}, status=401)
@@ -77,6 +110,13 @@ class DeletePostView(GenericAPIView):
     serializer_class = PostSerializer
 
     @permission_classes(IsAuthenticated, )
+    @swagger_auto_schema(
+        responses={
+            200 : openapi.Response('Success'),
+            400 : 'Bad Requset',
+            401 : 'Authentication Failed',
+        }
+    )
     def delete(self, request, gallery_pk, post_pk):
         if request.user.is_authenticated:
             posting = Post.objects.get(id=post_pk)
@@ -99,6 +139,19 @@ class UploadCommentView(GenericAPIView):
     serializer_class = CommentSerializer
 
     @permission_classes(IsAuthenticated, )
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'content' : openapi.Schema(type=openapi.TYPE_STRING, description='댓글 내용')
+            }
+        ),
+        responses={
+            200 : openapi.Response('Success'),
+            400 : 'Bad Requset',
+            401 : 'Authentication Failed',
+        }
+    )
     def post(self, request, gallery_pk, post_pk, parent_comment=None):
         if request.user.is_authenticated:
             serializer = CommentSerializer(
@@ -114,7 +167,7 @@ class UploadCommentView(GenericAPIView):
             if serializer.is_valid():
                 serializer.save()
 
-                return JsonResponse({'message' : 'Upload success'}, status=201)
+                return JsonResponse({'message' : 'Upload success'}, status=200)
             return JsonResponse({'message' : 'Bad request'}, status=400)
         else :
             return JsonResponse({'message' : 'auth error'}, status=401)
@@ -123,6 +176,19 @@ class UpdateCommentView(GenericAPIView):
     serializer_class = CommentSerializer
 
     @permission_classes(IsAuthenticated, )
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'content' : openapi.Schema(type=openapi.TYPE_STRING, description='댓글 내용')
+            }
+        ),
+        responses={
+            200 : openapi.Response('Success'),
+            400 : 'Bad Requset',
+            401 : 'Authentication Failed',
+        }
+    )
     def put(self, request, gallery_pk, post_pk, comment_pk, parent_comment=None):
         if request.user.is_authenticated:
             comment = Comment.objects.get(id=comment_pk)
@@ -142,7 +208,7 @@ class UpdateCommentView(GenericAPIView):
                 if serializer.is_valid():
                     serializer.save()
 
-                    return JsonResponse({'message' : 'Update success'}, status=201)
+                    return JsonResponse({'message' : 'Update success'}, status=200)
                 return JsonResponse({'message' : 'Bad request'}, status=400)
             else :
                 return JsonResponse({'message' : 'different user'}, status=401)
@@ -153,6 +219,13 @@ class DeleteCommentView(GenericAPIView):
     serializer_class = CommentSerializer
 
     @permission_classes(IsAuthenticated, )
+    @swagger_auto_schema(
+        responses={
+            200 : openapi.Response('Success'),
+            400 : 'Bad Requset',
+            401 : 'Authentication Failed',
+        }
+    )
     def delete(self, request, gallery_pk, post_pk, comment_pk):
         if request.user.is_authenticated:
             comment = Comment.objects.get(id=comment_pk)
@@ -170,6 +243,12 @@ class LikeView(GenericAPIView):
     serializer_class = LikeSerialzier
 
     @permission_classes(IsAuthenticated, )
+    @swagger_auto_schema(
+        responses={
+            200 : openapi.Response('Success'),
+            401 : 'Authentication Failed',
+        }
+    )
     def post(self, request, gallery_pk, post_pk):
         if request.user.is_authenticated:
             post = Post.objects.get(id=post_pk)
@@ -193,6 +272,12 @@ class DisLikeView(GenericAPIView):
     serializer_class = DisLikeSerializer
 
     @permission_classes(IsAuthenticated, )
+    @swagger_auto_schema(
+        responses={
+            200 : openapi.Response('Success'),
+            401 : 'Authentication Failed',
+        }
+    )
     def post(self, request, gallery_pk, post_pk):
         if request.user.is_authenticated:
             post = Post.objects.get(id=post_pk)
