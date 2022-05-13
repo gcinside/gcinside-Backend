@@ -21,9 +21,9 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 
 schema_url_v1_patterns = [
-    url('<int:gallery_pk>/post/', include('v1.api.post.urls')),
-    url('gallery/', include('v1.api.gallery.urls')),
-    url('accounts/', include('accounts.urls')),
+    url('<int:gallery_pk>/post/', include('api.post.urls')),
+    url('gallery/', include('api.gallery.urls')),
+    url('accounts/', include('api.accounts.urls')),
 ]
 
 schema_view_v1 = get_schema_view(
@@ -48,7 +48,7 @@ urlpatterns = [
 
     path('accounts/',include('dj_rest_auth.urls')),
     path('accounts/',include('allauth.urls')),
-    path('accounts/', include('accounts.urls')),
+    path('accounts/', include('api.accounts.urls')),
 
     # Auto DRF API docs
     url(r'^swagger(?P<format>\.json|\.yaml)/v1$', schema_view_v1.without_ui(cache_timeout=0), name='schema-json'),
@@ -56,8 +56,8 @@ urlpatterns = [
     url(r'^redoc/v1/$', schema_view_v1.with_ui('redoc', cache_timeout=0), name='schema-redoc-v1'),
 
     # 갤러리
-    path('gallery/', include('v1.api.gallery.urls')),
+    path('gallery/', include('api.gallery.urls')),
 
     # 게시글
-    path('<int:gallery_pk>/post/', include('v1.api.post.urls')),
+    path('<int:gallery_pk>/post/', include('api.post.urls')),
 ]

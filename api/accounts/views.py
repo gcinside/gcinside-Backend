@@ -1,5 +1,5 @@
 from django.conf import settings
-from accounts.models import User
+from api.accounts.models import User
 from django.shortcuts import redirect
 from django.utils import timezone
 from allauth.socialaccount.models import SocialAccount

@@ -1,6 +1,6 @@
 from django.db import models
-from accounts.models import User
-from v1.api.gallery.models import Gallery
+from api.accounts.models import User
+from api.gallery.models import Gallery
 
 # Create your models here.
 class Post(models.Model):
