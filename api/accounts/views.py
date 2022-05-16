@@ -1,5 +1,5 @@
 from django.conf import settings
-from accounts.models import User
+from .models import User
 from django.shortcuts import redirect
 from django.utils import timezone
 from allauth.socialaccount.models import SocialAccount
@@ -177,7 +177,7 @@ class UpdateUsername(GenericAPIView):
 
         if serializer.is_valid():
             serializer.save()
-            return JsonResponse({'message' : 'Username Update'}, status=201)
+            return JsonResponse({'message' : 'Update username'}, status=200)
         return JsonResponse({'message' : 'Bad request'}, status=400)
 
 class UpdateProfileImage(GenericAPIView):
@@ -197,7 +197,7 @@ class UpdateProfileImage(GenericAPIView):
         if serializer.is_valid():
             serializer.save()
 
-            return JsonResponse({'message' : 'Image Update'}, status=201)
+            return JsonResponse({'message' : 'Update Image'}, status=200)
         return JsonResponse({'message' : 'Bad request'}, status=400)
 
 class Report(GenericAPIView):

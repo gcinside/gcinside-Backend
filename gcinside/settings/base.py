@@ -41,10 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_filters',
-    'v1.api.post',
-    'v1.api.gallery',
+    'api.post',
+    'api.gallery',
     # my app
-    'accounts',
+    'api.accounts',
 
     # django-rest-framework
     'rest_framework',

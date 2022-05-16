@@ -10,7 +10,7 @@ from .models import Post, Comment
 from .pagination import PostPagination
 
 from rest_framework.decorators import permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.generics import GenericAPIView, ListCreateAPIView
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
@@ -57,7 +57,7 @@ class UploadPostView(GenericAPIView):
             logging.info(serializer.data)
             return JsonResponse({'message' : 'Bad request'}, status=400)
         else :
-            return JsonResponse({'message' : 'auth error'}, status=401)
+            return JsonResponse({'message' : 'Authentication Failed'}, status=401)
 
 class UpdatePostView(GenericAPIView):
     serializer_class = PostSerializer
@@ -77,6 +77,7 @@ class UpdatePostView(GenericAPIView):
             200 : openapi.Response('Success'),
             400 : 'Bad Requset',
             401 : 'Authentication Failed',
+            403 : 'Forbidden',
         }
     )
     def put(self, request, gallery_pk, post_pk):
@@ -102,9 +103,9 @@ class UpdatePostView(GenericAPIView):
                     return JsonResponse({'message' : 'Update success'}, status=200)
                 return JsonResponse({'message' : 'Bad request'}, status=400)
             else :
-                return JsonResponse({'message' : 'different user'}, status=401)
+                return JsonResponse({'message' : 'different user'}, status=403)
         else :
-            return JsonResponse({'message' : 'auth error'}, status=401)
+            return JsonResponse({'message' : 'Authentication Failed'}, status=401)
 
 class DeletePostView(GenericAPIView):
     serializer_class = PostSerializer
@@ -115,6 +116,7 @@ class DeletePostView(GenericAPIView):
             200 : openapi.Response('Success'),
             400 : 'Bad Requset',
             401 : 'Authentication Failed',
+            403 : 'Forbidden',
         }
     )
     def delete(self, request, gallery_pk, post_pk):
@@ -125,9 +127,9 @@ class DeletePostView(GenericAPIView):
                 posting.delete()
 
                 return JsonResponse({'message' : 'Delete success'}, status=200)
-            return JsonResponse({'message' : 'different user'}, status=401)
+            return JsonResponse({'message' : 'different user'}, status=403)
         else :
-            return JsonResponse({'message' : 'auth error'}, status=401)
+            return JsonResponse({'message' : 'Authentication Failed'}, status=401)
 
 class PostListView(ListCreateAPIView):
     queryset = Post.objects.all()
@@ -170,7 +172,7 @@ class UploadCommentView(GenericAPIView):
                 return JsonResponse({'message' : 'Upload success'}, status=200)
             return JsonResponse({'message' : 'Bad request'}, status=400)
         else :
-            return JsonResponse({'message' : 'auth error'}, status=401)
+            return JsonResponse({'message' : 'Authentication Failed'}, status=401)
 
 class UpdateCommentView(GenericAPIView):
     serializer_class = CommentSerializer
@@ -213,7 +215,7 @@ class UpdateCommentView(GenericAPIView):
             else :
                 return JsonResponse({'message' : 'different user'}, status=401)
         else :
-            return JsonResponse({'message' : 'auth error'}, status=401)
+            return JsonResponse({'message' : 'Authentication Failed'}, status=401)
 
 class DeleteCommentView(GenericAPIView):
     serializer_class = CommentSerializer
@@ -224,6 +226,7 @@ class DeleteCommentView(GenericAPIView):
             200 : openapi.Response('Success'),
             400 : 'Bad Requset',
             401 : 'Authentication Failed',
+            403 : 'Forbidden',
         }
     )
     def delete(self, request, gallery_pk, post_pk, comment_pk):
@@ -234,9 +237,9 @@ class DeleteCommentView(GenericAPIView):
                 comment.delete()
 
                 return JsonResponse({'message' : 'Delete success'}, status=200)
-            return JsonResponse({'message' : 'Different user'}, status=401)
+            return JsonResponse({'message' : 'Different user'}, status=403)
         else :
-            return JsonResponse({'message' : 'auth error'}, status=401)
+            return JsonResponse({'message' : 'Authentication Failed'}, status=401)
 
 # reaction
 class LikeView(GenericAPIView):
@@ -266,7 +269,7 @@ class LikeView(GenericAPIView):
 
             return JsonResponse({'message' : message, 'like_count' : like_count}, status=200)
         else :
-            return JsonResponse({'message' : 'auth error'}, status=401)
+            return JsonResponse({'message' : 'Authentication Failed'}, status=401)
 
 class DisLikeView(GenericAPIView):
     serializer_class = DisLikeSerializer
@@ -295,4 +298,4 @@ class DisLikeView(GenericAPIView):
 
             return JsonResponse({'message' : message, 'dislike_count' : dislike_count}, status=200)
         else :
-            return JsonResponse({'message' : 'auth error'}, status=401)
+            return JsonResponse({'message' : 'Authentication Failed'}, status=401)

@@ -46,4 +46,4 @@ class UploadGalleryView(GenericAPIView):
                 return JsonResponse({'message' : 'Upload success'}, status=201)
             return JsonResponse({'message' : 'Bad request'}, stauts=400)
         else :
-            return JsonResponse({'message' : 'Not Admin'}, status=401)
+            return JsonResponse({'message' : 'Authentication Failed'}, status=401)
