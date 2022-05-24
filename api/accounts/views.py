@@ -1,15 +1,12 @@
-from sqlite3 import Date
 from django.conf import settings
-from accounts.models import User
+from api.accounts.models import User
 from django.shortcuts import redirect
 from django.utils import timezone
 from allauth.socialaccount.models import SocialAccount
 from dj_rest_auth.registration.views import SocialLoginView
-from allauth.socialaccount.providers import github
 from allauth.socialaccount.providers.google import views as google_view
 from allauth.socialaccount.providers.github import views as github_view
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
-import requests
 from django.http import JsonResponse
 import requests
 from rest_framework import status
@@ -19,7 +16,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from .serializers import ReportUserSerializer, UserSerializer
 import logging.config
 import logging
-from gcinside.settings import DEFAULT_LOGGING
+from gcinside.settings.base import DEFAULT_LOGGING
 from rest_framework.decorators import api_view, permission_classes
 
 logging.config.dictConfig(DEFAULT_LOGGING)
@@ -35,7 +32,7 @@ def google_login(request):
 
     return redirect(f"https://accounts.google.com/o/oauth2/v2/auth?client_id={client_id}&response_type=code&redirect_uri={GOOGLE_CALLBACK_URI}&scope={scope}")
 
-@api_view(['POST'])
+@api_view(['GET'])
 @permission_classes([AllowAny, ])
 def google_callback(request):
     client_id = getattr(settings, "SOCIAL_AUTH_GOOGLE_CLIENT_ID")
@@ -97,7 +94,7 @@ def github_login(request):
         f"https://github.com/login/oauth/authorize?client_id={client_id}&redirect_uri={GITHUB_CALLBACK_URI}"
     )
 
-@api_view(['POST'])
+@api_view(['GET'])
 @permission_classes([AllowAny, ])
 def github_callback(request):
     client_id = getattr(settings, 'SOCIAL_AUTH_GITHUB_CLIENT_ID')

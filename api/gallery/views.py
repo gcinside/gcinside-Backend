@@ -1,10 +1,8 @@
-from django.shortcuts import render
 from django.http.response import JsonResponse
-from django.utils import timezone
 
 import logging.config
 import logging
-from gcinside.settings import DEFAULT_LOGGING
+from gcinside.settings.base import DEFAULT_LOGGING
 
 from .serializers import GallerySerializer
 
