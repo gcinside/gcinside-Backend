@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 import sys
 import json
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 ROOT_DIR = os.path.dirname(BASE_DIR)
@@ -40,28 +41,30 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # django-filter
     'django_filters',
-    'v1.api.post',
-    'v1.api.gallery',
-    # my app
-    'accounts',
+
+    'api.post',
+    'api.gallery',
+    'api.accounts',
 
     # django-rest-framework
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
+
     # dj-rest-auth
     'dj_rest_auth',
     'dj_rest_auth.registration',
+
     # django-allauth
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.github',
     'allauth.socialaccount.providers.google',
-    # api 문서 자동화툴
-    'drf_yasg',
 ]
 
 SITE_ID = 1
@@ -85,33 +88,6 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
     ),
-}
-
-SWAGGER_SETTINGS = {
-    'USE_SESSION_AUTH': True,  # add Django Login and Django Logout buttons, CSRF token to swagger UI page
-    'LOGIN_URL': '/rest-auth/login',  # URL for the login button
-    'LOGOUT_URL': '/rest-auth/logout',  # URL for the logout button
-
-    # Swagger security definitions to include in the schema;
-    # see https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md#security-definitions-object
-    'SECURITY_DEFINITIONS': {
-        'basic': {
-            'type': 'basic'
-        }
-    },
-
-    # url to an external Swagger validation service; defaults to 'http://online.swagger.io/validator/'
-    # set to None to disable the schema validation badge in the UI
-    'VALIDATOR_URL': '',
-
-    # swagger-ui configuration settings, see https://github.com/swagger-api/swagger-ui/blob/112bca906553a937ac67adc2e500bdeed96d067b/docs/usage/configuration.md#parameters
-    'OPERATIONS_SORTER': None,
-    'TAGS_SORTER': None,
-    'DOC_EXPANSION': 'list',
-    'DEEP_LINKING': False,
-    'SHOW_EXTENSIONS': True,
-    'DEFAULT_MODEL_RENDERING': 'model',
-    'DEFAULT_MODEL_DEPTH': 2,
 }
 
 MIDDLEWARE_CLASSES = (
