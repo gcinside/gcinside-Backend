@@ -1,4 +1,4 @@
-[[package]]
+git [[package]]
 name = "asgiref"
 version = "3.5.2"
 description = "ASGI specs, helper code, and adapters"
