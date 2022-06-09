@@ -1,4 +1,4 @@
-"""gcinside URL Configuration
+"""config URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.0/topics/http/urls/
@@ -14,18 +14,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import include, path
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-
-    path('accounts/',include('dj_rest_auth.urls')),
-    path('accounts/',include('allauth.urls')),
-    path('accounts/', include('api.accounts.urls')),
-
+    path("admin/", admin.site.urls),
+    path("accounts/", include("dj_rest_auth.urls")),
+    path("accounts/", include("allauth.urls")),
+    path("accounts/", include("api.accounts.urls")),
     # 갤러리
-    path('gallery/', include('api.gallery.urls')),
-
+    path("gallery/", include("api.gallery.urls")),
     # 게시글
-    path('<int:gallery_pk>/post/', include('api.post.urls')),
+    path("<int:gallery_pk>/post/", include("api.post.urls")),
 ]
