@@ -1,0 +1,22 @@
+asgiref==3.5.2
+certifi==2022.5.18.1
+charset-normalizer==2.0.12
+idna==3.3
+mysqlclient==2.1.0
+PyJWT==2.4.0
+pytz==2022.1
+requests==2.27.1
+sqlparse==0.4.2
+urllib3==1.26.9
+
+# Django
+# ------------------------------------------------------------------------------
+django==4.0.4 # https://www.djangoproject.com/
+django-allauth==0.51.0  # https://github.com/pennersr/django-allauth
+django-filter==21.1
+dj-rest-auth==2.2.4
+# Django REST Framework
+djangorestframework==3.13.1  # https://github.com/encode/django-rest-framework
+djangorestframework-simplejwt==5.2.0
+# DRF-spectacular for api documentation
+drf-spectacular==0.22.1  # https://github.com/tfranzel/drf-spectacular
