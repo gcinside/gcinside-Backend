@@ -11,3 +11,8 @@ class Gallery(models.Model):
 
     def __str__(self) -> str:
         return self.gallery_name + " 갤러리"
+
+
+class Star(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    Gallery = models.ForeignKey(Gallery, on_delete=models.CASCADE)

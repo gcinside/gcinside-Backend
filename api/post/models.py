@@ -14,7 +14,7 @@ class Post(models.Model):
     created_at = models.DateTimeField()
 
     def __str__(self) -> str:
-        return self.title
+        return self.pk
 
 
 class Comment(models.Model):
@@ -24,7 +24,7 @@ class Comment(models.Model):
     created_at = models.DateTimeField()
 
     def __str__(self) -> str:
-        return self.content
+        return self.pk
 
 
 class Like(models.Model):

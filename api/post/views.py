@@ -11,12 +11,7 @@ from config.settings.base import DEFAULT_LOGGING
 
 from .models import Comment, Post
 from .pagination import PostPagination
-from .serializers import (
-    CommentSerializer,
-    DisLikeSerializer,
-    LikeSerialzier,
-    PostSerializer,
-)
+from .serializers import CommentSerializer, LikeSerialzier, PostSerializer
 
 logging.config.dictConfig(DEFAULT_LOGGING)
 # Create your views here.
@@ -221,7 +216,7 @@ class LikeView(GenericAPIView):
 
 
 class DisLikeView(GenericAPIView):
-    serializer_class = DisLikeSerializer
+    serializer_class = LikeSerialzier
 
     @permission_classes(
         IsAuthenticated,
