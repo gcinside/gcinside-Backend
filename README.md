@@ -14,7 +14,7 @@ sudo apt-get install python3-venv
 ```
 - apply python virtual environment 
 ```shell
-source /srv/gcinside-Backend/bin/actiavate
+source /srv/config-Backend/bin/actiavate
 ```
 - install mysql-devel ,pip3, etc for mysql-client
 ```shell
@@ -22,7 +22,7 @@ sudo apt-get install python3-pip python-dev python3-dev libmysqlclient-dev gcc
 ```
 - install requirement.txt using pip
 ```shell
-pip3 install -r requirements.txt
+pip3 install -r base.txt
 ```
 
 > test server status
